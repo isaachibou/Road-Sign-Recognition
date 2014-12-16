@@ -7,6 +7,8 @@ clc;
 
 roadsign = imread('../data/test-image.png');
 
+panel = struct('image', roadsign, 'shape', '', 'color1', '', 'color2', '', 'id', '');
+
 %% Circular Pannels
 
 [Circle1, Circle2, Circle3] = circleDetection(roadsign);
