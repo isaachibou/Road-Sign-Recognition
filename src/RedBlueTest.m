@@ -1,6 +1,6 @@
 clc
 close all
-I=imread('paris12.jpg');
+I=imread('../data/paris12.jpg');
 I2=I;
 figure
 imshow(I)
@@ -57,3 +57,13 @@ imshow(IB+I2)
 
 figure 
 imshow(I2+IB+IR)
+
+%-- Find circles
+figure
+imshow(IR)
+close all
+[centers, radii] = imfindcircles(I2+IR,[15 60],'ObjectPolarity','dark', 'Sensitivity', 0.932)
+figure
+imshow(IR+I2);
+h = viscircles(centers,radii);
+

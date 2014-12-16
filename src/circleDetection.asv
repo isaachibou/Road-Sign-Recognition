@@ -1,0 +1,43 @@
+function [ A,B,C ] = circleDetection( I )
+    
+    %-- Find circles
+    [centers, radii] = imfindcircles(I,[15 30],'ObjectPolarity','dark', 'Sensitivity', .98);
+    h = viscircles(centers,radii);
+
+    %-- Extract the three strongests
+    [a, b] = size(centers);
+        
+    limit = 3;
+    if a < limit 
+       limit = a; 
+    end
+    
+%     cent = zeros(3,2);
+%     rad = zeros(3);
+%     
+%     for i=1:limit
+%          cent(i,1) = centers(i,1);
+%          cent(i,2) = centers(i,2);
+%          rad(i) = radii(i);
+%     end
+    
+    for i=1:limit
+        %-- Crop Circles
+        infX = floor(centers(1,1) - radii(1));
+        supX = ceil(centers(1,1) + radii(1));
+
+        infY = floor(centers(1,2) - radii(1));
+        supY = ceil(centers(1,2) + radii(1));
+        
+        if i == 1
+            A = roadsign(infY:supY, infX:supX, 1:3);
+        elseif 
+        
+    end
+
+
+
+
+
+end
+

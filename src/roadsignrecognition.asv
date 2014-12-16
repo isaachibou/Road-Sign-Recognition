@@ -1,0 +1,23 @@
+clear;
+clc;
+
+%% RoadSignRecognition
+% Application written to recognize road signs on french roads.
+% May be use for one picture, or a folder of picture.
+
+roadsign = imread('../data/test-image.png');
+
+%% Circular Pannels
+
+[centers, radii] = circleDetection(roadsign);
+for i:1
+%-- Crop Pannel
+infX = floor(centers(1,1) - radii(1))
+supX = ceil(centers(1,1) + radii(1))
+
+infY = floor(centers(1,2) - radii(1))
+supY = ceil(centers(1,2) + radii(1))
+
+A = roadsign(infY:supY, infX:supX, 1:3);
+figure 
+imshow(A)

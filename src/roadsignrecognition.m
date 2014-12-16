@@ -1,4 +1,5 @@
 clear;
+clc;
 
 %% RoadSignRecognition
 % Application written to recognize road signs on french roads.
@@ -6,26 +7,15 @@ clear;
 
 roadsign = imread('../data/test-image.png');
 
-%% Treatment of the picture
-% Binarization of the picture
-bin_sign = binarization(roadsign);
-% Cutting the sign off the picture
-cut_sign = cutting(roadsign, bin_sign);
+%% Circular Pannels
 
-%% First classification : work on the shape
-% Detection of the shape, given the binarized picture
-shape = shapedetection(cut_sign);
-% Detection of the color, given the cut sign
-color = colordetection(cut_sign);
-% Classification of the panel
-first_classification = signclassification(shape, color);
+[Circle1, Circle2, Circle3] = circleDetection(roadsign);
 
-%% Second classification : work on the sign content
-% Detection of the content
-content = contentdetection(cut_sign);
-% Classification of the content
-second_classification = contentclassification(content);
+figure
+imshow(Circle1);
 
-%% Conclusion
-% Compute the two classification together
-% Display the found sign
+figure
+imshow(Circle2);
+
+figure
+imshow(Circle3);
