@@ -13,11 +13,14 @@ panel = struct('image', roadsign, 'shape', '', 'color1', '', 'color2', '', 'id',
 
 [Circle1, Circle2, Circle3] = circleDetection(roadsign);
 
-figure
-imshow(Circle1);
+panel(1).image = Circle1;
+panel(2).image = Circle2;
+panel(3).image = Circle3;
 
-figure
-imshow(Circle2);
+panel(1).shape = 'circular';
+panel(2).shape = 'circular';
+panel(3).shape = 'circular';
 
-figure
-imshow(Circle3);
+%% Triangles + Squares
+
+%% Stuff
