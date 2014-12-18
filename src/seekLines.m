@@ -3,10 +3,9 @@ function [ Lignes ] = seekLines( I )
     line = size(I,1);
     
     %Nombre de pixels non noirs
-    S = sum(I~=0,2);
-  
-    %100x2 lignes à trouver, début - fin
-    Lignes = zeros(100,2);
+    S = sum(I>50,2);
+    
+    Lignes = [];
     p = 1;
     
     i=1;

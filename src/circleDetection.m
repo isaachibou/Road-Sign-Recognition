@@ -2,7 +2,7 @@ function [ A,B,C ] = circleDetection( I )
     
     %-- Find circles
     [centers, radii] = imfindcircles(I,[15 30],'ObjectPolarity','dark', 'Sensitivity', .98);
-    h = viscircles(centers,radii);
+     
 
     %-- Extract the three strongests
     [a, b] = size(centers);
