@@ -8,20 +8,21 @@ clc;
 
 roadsign = imread('../data/crossing_007.png');
 
-panel = struct('image', roadsign, 'shape', '', 'color1', '', 'color2', '', 'id', '');
+% Declaration of structure
+panels = struct('image', {}, 'shape', {}, 'color1', {}, 'color2', {}, 'id', {});
 
 %% Circular Pannels
 
 [Circle1, Circle2, Circle3] = circleDetection(roadsign);
 
-panel(1).image = Circle1;
-panel(2).imagse = Circle2;
-panel(3).image = Circle3;
+panels(1).image = Circle1;
+panels(2).image = Circle2;
+panels(3).image = Circle3;
     
 % most likely
-panel(1).shape = 'circular';
-panel(2).shape = 'circular';
-panel(3).shape = 'circular';
+panels(1).shape = 'circular';
+panels(2).shape = 'circular';
+panels(3).shape = 'circular';
 
 %% Color Detection
 
@@ -63,6 +64,7 @@ end
 
 %% Triangles + Squares
 
-%% Compare
+%% Color detection
+colordetection(panels);
 
- 
+%% Compare

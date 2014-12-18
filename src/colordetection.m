@@ -1,51 +1,61 @@
-function [ Ibinary ] = colordetection( I )
-%return grayscale image after tresholding with blue and red pixels in white 
-   
-    I=rgb2hsv(I);
+function [ panels ] = colordetection( panels )
+% COLORDETECTION
+% Detect the two main color of the panel, and update it in the panel data,
+% so it can be used later to simplify the decision process.
 
-    %Color H S V
-    %Red H?240 or H?10 S?40 V?30
-    %((I(i,j,1)>=240/255 || I(i,j,1)<=10/255) && I(i,j,2)>=40/255 && I(i,j,3)>=30/255 )
-    %Yellow 18?H?45 S?148 V?66
-    %Blue 120<H?175 S?127.5 V?20 
-    %bluePixels = hueImage > 0.4 & hueImage < 0.7 & valueImage < 0.8;
+    % Iterating the process in each panel
+    for i=1:1:size(panels, 2)
+        I = panels(i).image;
 
-    s=size(I);
-    
-    I(73,246,:)
+        % Searching colors using histograms, so maximum occurence of a
+        % color can be counted.
+        red     = imhist(I(:,:,1));
+        green   = imhist(I(:,:,2));
+        blue    = imhist(I(:,:,3));
+        
+        % For the first color, we don't considere black as an option, so we
+        % don't search the max in this range.
+        [~, ired]   = max(red(2:256));
+        [~, igreen] = max(green(2:256));
+        [~, iblue]  = max(blue(2:256));
 
-    IR = uint8(zeros(s));
-    for i=1:s(1)
-    for j=1:s(2)
-        if ((I(i,j,1)>=235/255 || I(i,j,1)<=15/255) && I(i,j,2)>=40/255 && I(i,j,3)>=30/255 )
-            IR(i,j,:)=255;
+        % Searching the first color (usually the main) and partially
+        % removing it from the histogram.
+        if (ired <= 127) && (igreen <= 127) && (iblue >= 127)
+            blue(127:256) = blue(127:256)/2;
+            panels(i).color1 = 'blue';
+        elseif (ired >= 127) && (igreen <= 127) && (iblue <= 127)
+            red(127:256) = red(127:256)/2;
+            panels(i).color1 = 'red';
+        elseif (ired >= 127) && (igreen >= 127) && (iblue >= 127)
+            red(127:256)   = red(127:256)/2;
+            green(127:256) = green(127:256)/2;
+            blue(127:256)  = blue(127:256)/2;
+            panels(i).color1 = 'white';
+        elseif (ired <= 127) && (igreen <= 127) && (iblue <= 127)
+            red(1:127)   = red(1:127)/2;
+            green(1:127) = green(1:127)/2;
+            blue(1:127)  = blue(1:127)/2;
+            panels(i).color1 = 'black';
+        else
+            disp('No valid color found');
+        end
+        
+        % Searching a second main color.
+        [~, ired]   = max(red);
+        [~, igreen] = max(green);
+        [~, iblue]  = max(blue);
+        
+        if (ired <= 127) && (igreen <= 127) && (iblue >= 127)
+            panels(i).color2 = 'blue';
+        elseif (ired >= 127) && (igreen <= 127) && (iblue <= 127)
+            panels(i).color2 = 'red';
+        elseif (ired >= 127) && (igreen >= 127) && (iblue >= 127)
+            panels(i).color2 = 'white';
+        elseif (ired <= 127) && (igreen <= 127) && (iblue <= 127)
+            panels(i).color2 = 'black';
+        else
+            disp('No valid color found');
         end
     end
-    end
-
-    IB = uint8(zeros(s));
-    for i=1:s(1)
-    for j=1:s(2)
-        if ((I(i,j,1)>120/255 && I(i,j,1)<=175/255 ) && I(i,j,2)>=127.5/255 && I(i,j,3)>=20/255 )
-            IB(i,j,:)=255;
-        end
-    end
-    end
-
-    IR=rgb2gray(IR);
-    IB=rgb2gray(IB);
-
-    %erosion 
-    SE1=[0 1 0; 1 1 1; 0 1 0];
-    se = strel('disk',4);
-    IR=imerode(IR,SE1);
-    IB=imerode(IB,SE1);
-
-    IR=imclose(IR,se);
-    IB=imclose(IB,se);
-    figure
-    imshow(IR+IB);
-   
-    Ibinary=IB+IR;
-    
 end
