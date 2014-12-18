@@ -66,4 +66,3 @@ close all
 figure
 imshow(IR+I2);
 h = viscircles(centers,radii);
-
