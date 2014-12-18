@@ -52,10 +52,7 @@ function [ triangles ] = triangleDetection( I )
             end
 
             Itemp=Ib( l:l2, c:c2,:);
-            figure
-            imshow(Itemp)
-
-            hold on
+            
             BW = edge(Itemp,'canny');
             [H,T,R] = hough(BW);
 
@@ -66,16 +63,21 @@ function [ triangles ] = triangleDetection( I )
 
             if not(isempty(hlines(1).point1))
                if isTriangle(lines,hlines);
-                   triangles(index) = struct('image', I(l:l2, c:c2), 'shape', 'triangular', 'color1', '', 'color2', '', 'id', '');
-                   index=index+1; 
+                   triangles(index) = struct('image', I(l:l2, c:c2,:), 'shape', 'triangular', 'color1', '', 'color2', '', 'id', '');
+                   index=index+1;
+                   
+                   figure
+                   imshow(Itemp)
+                    hold on
+                    for k = 1:length(lines)
+                       xy = [lines(k).point1; lines(k).point2];
+                       plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+                    end
+                    hold off
                end
             end
            
-            for k = 1:length(lines)
-               xy = [lines(k).point1; lines(k).point2];
-               plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
-            end
-            hold off
+           
         end
     end
 
