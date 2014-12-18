@@ -10,7 +10,7 @@ function [ Col ] = seekColumns( I, Lignes )
          p = 1;
          IA = I(Lignes(j,1):Lignes(j,2), 1:col);
          % Nombre de pixels non noirs
-         S = sum(IA~=0);
+         S = sum(IA>50);
 
          k=1;
          % On sauvegarde les coordonnes

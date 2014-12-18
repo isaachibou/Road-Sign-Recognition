@@ -19,7 +19,7 @@ function [ Result ] = computeDensities( I,nbLines,nbCol,Rectangles,m,n)
 
         for i=1:endCol
             for j=1:endLin
-                V(1,k)=mean(A(lin(j):lin(j+1),col(i):col(i+1)));
+                V(1,k)=mean(mean(A(lin(j):lin(j+1),col(i):col(i+1))));
                 k=k+1;
             end
         end

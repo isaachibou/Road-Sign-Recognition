@@ -11,17 +11,17 @@ n=6;
 apprentissage(m,n);
 
 %Image de test
-I=imread('../data/testgris.jpg');
+I=imread('../data/testgris2.jpg');
 
 %Rectangles
-L = seekLines(I);
-nbL = size(L,1);
-C = seekColumns(I, L);
-nbC = size(C,2)/2;
-R=seekRectangles(I,L,C);
+%L = seekLines(I)
+%nbL = size(L,1);
+%C = seekColumns(I, L)
+%nbC = size(C,2)/2;
+R=[1 1 size(I,2) size(I,1)];
 
 % Densités image de travail
-Densities = computeDensities(I, nbL,nbC, R, m, n);
+Densities = computeDensities(I,1,1, R, m, n);
 
 % Calcul scientifique trop fort
 base=load('Densities.mat','-ascii');

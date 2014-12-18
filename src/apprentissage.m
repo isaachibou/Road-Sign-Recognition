@@ -1,7 +1,7 @@
 function [ densities ] = apprentissage(m,n)
 
     %Image d'apprentissage
-    I=imread('../data/BaseGris.jpg');
+    I=imread('../data/BaseRond.jpg');
 
     %Rectangles
     L = seekLines(I);
