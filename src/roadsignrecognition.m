@@ -26,7 +26,7 @@ panels(3).shape = 'circular';
 
 %% Color Detection
 
-I = colordetection( roadsign);
+I = rgb2gray( roadsign);
 figure 
 imshow(I);
 
@@ -62,9 +62,16 @@ end
 
  
 
-%% Triangles + Squares
+%% Triangles 
+triangles=triangleDetection(roadsign);
+if strcmp(triangles(1).shape,'triangular')
+    panels=[panels triangles];
+end
+
+%% + Squares
 
 %% Color detection
-colordetection(panels);
+%index exceeds matrix dimension
+%colordetection(panels);
 
 %% Compare
