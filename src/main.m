@@ -1,14 +1,12 @@
 clear;
 
 % Nombre de lignes par chiffre à utiliser
-d=6;
-
 
 % Etablissement de la base d'apprentissage
 % Valeurs conseillées par l'énoncé
 m=6;
 n=6;
-apprentissage(m,n);
+learningPhase(m,n);
 
 %Image de test
 I=imread('../data/testgris2.jpg');
@@ -24,9 +22,8 @@ R=[1 1 size(I,2) size(I,1)];
 Densities = computeDensities(I,1,1, R, m, n);
 
 % Calcul scientifique trop fort
-base=load('Densities.mat','-ascii');
+base=load('learningDensities.mat','-ascii');
 res=seekClass(Densities,base);
-
 
 res
     

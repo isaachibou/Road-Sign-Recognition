@@ -1,10 +1,11 @@
-function [ panels ] = colordetection( panels )
+function [ panels ] = colorDetection( panels )
 % COLORDETECTION
 % Detect the two main color of the panel, and update it in the panel data,
 % so it can be used later to simplify the decision process.
 
+
     % Iterating the process in each panel
-    for i=1:1:size(panels, 2)
+    for i = 1:size(panels, 2)
         I = panels(i).image;
 
         % Searching colors using histograms, so maximum occurence of a

@@ -1,6 +1,6 @@
 function [ signs ] = squareDetection( I0 )
 
-    %- Parameters
+    %-- Parameters
     filledProportion = 0.8;
     
     %-- Find blue zones in I
@@ -11,7 +11,7 @@ function [ signs ] = squareDetection( I0 )
     for i=1:s(1)
         for j=1:s(2)
             if ((I(i,j,1)>120/255 && I(i,j,1)<=175/255 ) && I(i,j,2)>=127.5/255 && I(i,j,3)>=20/255 )
-                IB(i,j,:)=255;
+                IB(i,j,:)= 255;
             end
         end
     end
@@ -62,12 +62,13 @@ function [ signs ] = squareDetection( I0 )
             end
             if density/pixelNum > filledProportion         
                 %-- Draw detected signs
-                %rectangle('Position', props(:,i), 'EdgeColor', 'r');
+                % rectangle('Position', props(:,i), 'EdgeColor', 'r');
                 %-- Create new squared sign to be returned by the function
-                signs(signsIndex).image = I0(infY:supY, infX:supX, :); %warnings sur infxy et supxy
+                signs(signsIndex).image = I0(infY:supY, infX:supX, :);
                 figure('name', 'square')
                 imshow(signs(signsIndex).image)
-                signs(signsIndex).shape = 'square'; %warnings sur infxy et supxy
+                signs(signsIndex).shape = 'square';
+                signs(signsIndex).color1 = 'blue';
                 signsIndex = signsIndex + 1;
             end
         end

@@ -1,23 +1,29 @@
-function [ resultatMagique ] = seekClass( Densities, base)
+function [ class ] = seekClass( densities, base)
 %Blablabla
-    nbZones=size(Densities,2);
-    nbb=size(base,1);
-    diff = zeros(nbb,1);
+      
+    zoneNum = size(densities, 2);
+    classNum = size(base, 1);
+    diff = zeros(classNum, 1);
     
-    for i=1:nbb
-        blabla = 0;
-        blabla2 = 0;
-        for j=1:nbZones
+    for i = 1:classNum
+        ratio = 0;
+        currentValue = 0;
+        for j = 1:zoneNum
             if j == 1
-                blabla2 = abs(Densities(j) - base(i,j)) %Premiere valeur
+                % Save current value
+                currentValue = abs(densities(j) - base(i,j));
             else
-                blabla = blabla + abs(blabla2 - (Densities(j) - base(i,j))) %Precedente valeur - Actuelle
-                blabla2 = abs(Densities(j) - base(i,j)); %Sauvegarde valeur actuelle
+                % Difference between previous value and current value
+                ratio = ratio + abs(currentValue - (densities(j) - base(i,j)));
+                % Save current value
+                currentValue = abs(densities(j) - base(i,j));
             end
         end
-        diff(i) = blabla/nbb
+        diff(i) = ratio/classNum;
     end
-    a = min(diff);
-    resultatMagique = find(diff==a);
+    
+    % what ?
+    index = min(diff);
+    class = find(diff == index);
 end
 
