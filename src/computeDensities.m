@@ -1,8 +1,8 @@
-function [ Result ] = computeDensities( I,nbLines,nbCol,Rectangles,m,n)
+function [ Result ] = computeDensities( I,Rectangles,m,n)
 % Calcul de la densité de chaque chiffre
-    Result=zeros(nbLines*nbCol,m*n);
+    Result=[];
 
-    for o=1:nbLines*nbCol
+    for o=1:size(Rectangles,1)
         A= I(Rectangles(o,2):Rectangles(o,4),(Rectangles(o,1):Rectangles(o,3)));
         
         [l,c]=size(A);
