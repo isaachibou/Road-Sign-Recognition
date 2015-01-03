@@ -65,8 +65,7 @@ function [roadsigns] = roadSignRecognition( filepath )
         % background must be black --> TODO: must be improved
         mask = imcomplement(im2bw(graySign,graythresh(graySign)));
         graySign=graySign.*uint8(mask);
-        figure 
-        imshow(graySign)
+
         
         % Compute density for each area of the picture
         densities = computeDensities(graySign, R, m, n);
