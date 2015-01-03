@@ -10,7 +10,7 @@ if ~exist('learningDensities.mat', 'file')
     learningPhase(m,n);
 end
 %Image de test
-I=imread('../data/station.jpg');
+I=imread('../data/testgris2.jpg');
 
 %Rectangles
 R=[1 1 size(I,2) size(I,1)];

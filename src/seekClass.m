@@ -1,28 +1,28 @@
 function [ class ] = seekClass( densities, base)
 %Blablabla
       
-    zoneNum = size(densities, 2);
-    classNum = size(base, 1);
-    diff = zeros(classNum, 1);
+    nBzone = size(densities, 2);
+    nBclass = size(base, 1);
+    diff = zeros(nBclass, 1);
     
-    for i = 1:classNum
-        ratio = 0;
+    for i = 1:nBclass
+        sum = 0;
         currentValue = 0;
-        for j = 1:zoneNum
+        for j = 1:nBzone
             if j == 1
                 % Save current value
-                currentValue = abs(densities(j) - base(i,j));
+                previousValue = abs(densities(j) - base(i,j));
             else
                 % Difference between previous value and current value
-                ratio = ratio + abs(currentValue - (densities(j) - base(i,j)));
+                sum = sum + abs(previousValue - (densities(j) - base(i,j)));
                 % Save current value
-                currentValue = abs(densities(j) - base(i,j));
+                previousValue = abs(densities(j) - base(i,j));
             end
         end
-        diff(i) = ratio/classNum;
+        diff(i) = sum/nBzone;
     end
     
-    index = min(diff);
+    index = min(diff)
     class = find(diff == index);
 end
 
