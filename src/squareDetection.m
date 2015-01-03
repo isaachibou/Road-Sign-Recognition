@@ -33,7 +33,7 @@ function [ signs ] = squareDetection( I0 )
     
     %-- Keep only assumed squared signs function of the density of white
     %-- pixel and create them accordgin to standard structure
-    signs(1) = struct('image', '', 'shape', '', 'color1', '', 'color2', '', 'id', '');
+    signs = struct('image', {}, 'shape', {}, 'color1', {}, 'color2', {}, 'id', {});
     signsIndex = 1;
     
 %     figure

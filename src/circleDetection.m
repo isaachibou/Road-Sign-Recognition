@@ -12,8 +12,7 @@ function [ signs ] = circleDetection( I )
        limit = a; 
     end        
     
-    signs(1) = struct('image', '', 'shape', '', 'color1', '', 'color2', '', 'id', '');
-    signsIndex = 1;
+    signs = struct('image', {}, 'shape', {}, 'color1', {}, 'color2', {}, 'id', {});
     
     for i=1:limit
         %-- Crop Circles
@@ -25,8 +24,7 @@ function [ signs ] = circleDetection( I )
         
         %figure('name', 'circle')
         %imshow(I(infY:supY, infX:supX, :))
-        signs(signsIndex).image = I(infY:supY, infX:supX, :);
-        signs(signsIndex).shape = 'circular';
-        signsIndex = signsIndex + 1;
+        signs(i).image = I(infY:supY, infX:supX, :);
+        signs(i).shape = 'circular';
     end
 end

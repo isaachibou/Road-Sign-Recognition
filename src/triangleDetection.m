@@ -4,7 +4,7 @@ function [ triangles ] = triangleDetection( I )
     Ihsv=rgb2hsv(I);
     s=size(I);
     
-    triangles(1)=struct('image', '', 'shape', '', 'color1', '', 'color2', '', 'id', '');
+    triangles = struct('image', {}, 'shape', {}, 'color1', {}, 'color2', {}, 'id', {});
     index=1;
 
     IR = uint8(zeros(s));

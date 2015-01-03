@@ -24,7 +24,7 @@ function [roadsigns] = roadSignRecognition( filepath )
     circles = circleDetection(roadsignImage);
 
     % If at least one is found, add it to the roadsign collection
-    if strcmp(circles(1).shape,'circular')
+    if(not(isempty(circles)) && strcmp(circles(1).shape, 'circular'))
         roadsigns = [roadsigns circles];
     end
 
@@ -33,7 +33,7 @@ function [roadsigns] = roadSignRecognition( filepath )
     squares = squareDetection(roadsignImage);
 
     % If at least one is found, add it to the roadsign collection
-    if(strcmp(squares(1).shape, 'square'))
+    if(not(isempty(squares)) && strcmp(squares(1).shape, 'square'))
         roadsigns = [roadsigns squares];
     end
 
@@ -42,7 +42,7 @@ function [roadsigns] = roadSignRecognition( filepath )
     triangles = triangleDetection(roadsignImage);
 
     % If at least one is found, add it to the roadsign collection
-    if strcmp(triangles(1).shape,'triangular')
+    if(not(isempty(triangles)) && strcmp(triangles(1).shape,'triangular'))
         roadsigns = [roadsigns triangles];
     end
 
@@ -51,12 +51,12 @@ function [roadsigns] = roadSignRecognition( filepath )
 
     %% Roadsign identification knowing shape, main color and secondary color
 
-    for i = 1:size(roadsigns,2)   
+    for i = 1:size(roadsigns, 2)   
         % Dimensions of regarded rectangle
         R = [1 1 size(roadsigns(i).image,2) size(roadsigns(i).image,1)];
 
         % Compute densities by zoning
-        densities = computeDensities(roadsigns(i).image, 1, 1, R, m, n);
+        densities = computeDensities(roadsigns(i).image, R, m, n);
         % base = load('Densities.mat','-ascii');
 
         % Class identification according to densities comparison
