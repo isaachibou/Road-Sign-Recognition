@@ -16,7 +16,11 @@ function [roadsigns] = roadSignRecognition( filepath )
     % -- height
     n = 6;
     % -- Learning
-    learningDensities = learningPhase(m,n);
+    if ~exist('learningDensities.mat', 'file')
+        learningDensities = learningPhase(m,n);
+    else
+        learningDensities = load('learningDensities.mat','-ascii');
+    end
 
 
     %% Circular Pannels
@@ -55,9 +59,11 @@ function [roadsigns] = roadSignRecognition( filepath )
         % Dimensions of regarded rectangle
         R = [1 1 size(roadsigns(i).image,2) size(roadsigns(i).image,1)];
 
-        % Compute densities by zoning
+        % Equalize histogram
+        roadsigns(i).image = histeq(roadsigns(i).image);
+        
+        % Compute density for each area of the picture
         densities = computeDensities(roadsigns(i).image, R, m, n);
-        % base = load('Densities.mat','-ascii');
 
         % Class identification according to densities comparison
         roadsigns(i).id = seekClass(densities, learningDensities);

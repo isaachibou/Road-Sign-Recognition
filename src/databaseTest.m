@@ -18,7 +18,7 @@ R=[1 1 size(I,2) size(I,1)];
 % Densités image de travail
 Densities = computeDensities(I, R, m, n);
 
-% Calcul scientifique trop fort
+% Comparaison pour trouver la classe
 base=load('learningDensities.mat','-ascii');
 res=seekClass(Densities,base);
 
