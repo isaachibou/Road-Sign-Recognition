@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 01-Jan-2015 22:27:27
+% Last Modified by GUIDE v2.5 03-Jan-2015 14:08:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -43,7 +43,6 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-images;
 
 % --- Executes just before gui is made visible.
 function gui_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -78,15 +77,34 @@ function prevButton_Callback(hObject, eventdata, handles)
 % hObject    handle to prevButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
+if(handles.index == 1)
+    handles.index = size(handles.images);
+else 
+    handles.index = handles.index - 1;
+end
+imagepath = strcat(handles.filepath,'\',handles.images(handles.index).name);
+I = imread(imagepath);
+axes(handles.image);
+imshow(I);
+launchRecognition(imagepath, handles);
+guidata(hObject,handles);
 
 % --- Executes on button press in nextButton.
 function nextButton_Callback(hObject, eventdata, handles)
 % hObject    handle to nextButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+if(handles.index + 1 == size(handles.images))
+    handles.index = 1;
+else 
+    handles.index = handles.index + 1;
+end
+imagepath = strcat(handles.filepath,'\',handles.images(handles.index).name);
+I = imread(imagepath);
+axes(handles.image);
+imshow(I);
+launchRecognition(imagepath, handles);
+guidata(hObject, handles);
 
 % --- Executes on button press in loadFolderButton.
 function loadFolderButton_Callback(hObject, eventdata, handles)
@@ -94,16 +112,22 @@ function loadFolderButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 filepath = uigetdir(matlabroot,'Please select a directory');
-handles = guidata(gui);
 set(handles.textBox,'String',filepath)
-images = dir(fullfile(filepath, '/*.png'));
-%for i = 1:size(images);
-if(size(images) > 0)
-    axes(handles.image);
-    I = imread(strcat(filepath,'\',images(1).name));
-    imshow(I);
-end
-guidata(hObject, gui);
+guidata(hObject, handles);
+handles = updateImages(handles);
+handles.index = 1;
+handles.filepath = filepath;
+guidata(hObject, handles);
+
+% --- Executes on button press in OKButton.
+function OKButton_Callback(hObject, eventdata, handles)
+% hObject    handle to OKButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.filepath = get(handles.textBox,'String');
+handles = updateImages(handles);
+handles.index = 1;
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function textBox_CreateFcn(hObject, eventdata, handles)
@@ -117,29 +141,55 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on button press in OKButton.
-function OKButton_Callback(hObject, eventdata, handles)
-% hObject    handle to OKButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-handles = guidata(gui);
-if isequal(exist(get(handles.textBox, 'String'),'file'),2) % 2 means it's a file.
-    display('a file!');
-elseif isequal(exist(get(handles.textBox, 'String'), 'dir'),7) % 7 = directory.
-    display('a folder');
-else
-    display('path error');
+function launchRecognition(filepath, handles)
+roadsigns = roadSignRecognition(filepath);
+i = 0;
+listSign = {handles.sign1, handles.sign2, handles.sign3, handles.sign4};
+listRectangle = {handles.rectangle1, handles.rectangle2, handles.rectangle3, handles.rectangle4};
+size(roadsigns)
+while i < 4 && i < (size(roadsigns, 2))
+    i = i+1;
+    axes(listSign{i});
+    signImage = getMatchingSign(roadsigns(i).id);
+    imshow(signImage);
+    axes(listRectangle{i})
+    signImage = roadsigns(i).image;
+    imshow(signImage);
 end
-    I = imread('bike_001.png');
-handles = guidata(gui);
-axes(handles.image);
-imshow(I);
-guidata(hObject, gui);
+numSignsLeft = size(roadsigns, 2) - i;
+set(handles.signText, 'String', strcat(num2str(numSignsLeft),' signs more'));
+
+function handles = updateImages(handles)
+filepath = get(handles.textBox, 'String');
+if isequal(exist(filepath,'file'),2) % 2 means it's a file.
+    handles.images = dir(fullfile(filepath));
+    handles.filepath = filepath; %marche pas
+elseif isequal(exist(filepath, 'dir'),7) % 7 = directory.
+    handles.images = dir(fullfile(filepath, '/*.png')); 
+    handles.filepath = filepath;
+else
+    display('Seems like path is not correct');
+    return;
+end
+
+if(size(handles.images) > 0)
+    imagepath = strcat(handles.filepath,'\',handles.images(1).name);
+    I = imread(imagepath);
+    axes(handles.image);
+    imshow(I);
+    launchRecognition(imagepath, handles);
+end
+
+
 
 function textBox_Callback(hObject, eventdata, handles)
-% hObject    handle to textbox (see GCBO)
+% hObject    handle to textBox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of textbox as text
-%        str2double(get(hObject,'String')) returns contents of textbox as a double
+% Hints: get(hObject,'String') returns contents of textBox as text
+%        str2double(get(hObject,'String')) returns contents of textBox as a double
+handles.filepath = get(handles.textBox,'String');
+handles = updateImages(handles);
+handles.index = 1;
+guidata(hObject,handles);

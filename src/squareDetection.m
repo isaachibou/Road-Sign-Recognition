@@ -65,8 +65,8 @@ function [ signs ] = squareDetection( I0 )
                 % rectangle('Position', props(:,i), 'EdgeColor', 'r');
                 %-- Create new squared sign to be returned by the function
                 signs(signsIndex).image = I0(infY:supY, infX:supX, :);
-                figure('name', 'square')
-                imshow(signs(signsIndex).image)
+                %figure('name', 'square')
+                %imshow(signs(signsIndex).image)
                 signs(signsIndex).shape = 'square';
                 signs(signsIndex).color1 = 'blue';
                 signsIndex = signsIndex + 1;

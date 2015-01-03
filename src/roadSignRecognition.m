@@ -22,7 +22,6 @@ function [roadsigns] = roadSignRecognition( filepath )
         learningDensities = load('learningDensities.mat','-ascii');
     end
 
-
     %% Circular Pannels
     % Look for circular shapes 
     circles = circleDetection(roadsignImage);
@@ -66,6 +65,7 @@ function [roadsigns] = roadSignRecognition( filepath )
         densities = computeDensities(roadsigns(i).image, R, m, n);
 
         % Class identification according to densities comparison
+        learningDensities = load('learningDensities.mat', '-ascii');
         roadsigns(i).id = seekClass(densities, learningDensities);
     end
 

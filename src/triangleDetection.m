@@ -66,14 +66,14 @@ function [ triangles ] = triangleDetection( I )
                    triangles(index) = struct('image', I(l:l2, c:c2,:), 'shape', 'triangular', 'color1', 'red', 'color2', '', 'id', '');
                    index=index+1;
                    
-                   figure
-                   imshow(Itemp)
-                    hold on
-                    for k = 1:length(lines)
-                       xy = [lines(k).point1; lines(k).point2];
-                       plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
-                    end
-                    hold off
+%                    figure
+%                    imshow(Itemp)
+%                     hold on
+%                     for k = 1:length(lines)
+%                        xy = [lines(k).point1; lines(k).point2];
+%                        plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+%                     end
+%                     hold off
                end
             end
            

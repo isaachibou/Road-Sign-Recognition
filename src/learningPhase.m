@@ -7,6 +7,7 @@ function [ densities ] = learningPhase(m,n)
     L = seekLines(I);
     C = seekColumns(I, L);
     R = seekRectangles(I,L,C);
+    save('learningRectangles.mat','R','-ascii');
 
     % Calcul des vecteurs densités
     densities = computeDensities(I, R, m, n);

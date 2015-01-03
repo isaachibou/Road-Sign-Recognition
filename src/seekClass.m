@@ -22,7 +22,6 @@ function [ class ] = seekClass( densities, base)
         diff(i) = ratio/classNum;
     end
     
-    % what ?
     index = min(diff);
     class = find(diff == index);
 end
