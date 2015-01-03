@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 03-Jan-2015 14:08:24
+% Last Modified by GUIDE v2.5 03-Jan-2015 14:55:15
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,7 +78,7 @@ function prevButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if(handles.index == 1)
-    handles.index = size(handles.images);
+    handles.index = size(handles.images, 1);
 else 
     handles.index = handles.index - 1;
 end
@@ -94,7 +94,7 @@ function nextButton_Callback(hObject, eventdata, handles)
 % hObject    handle to nextButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if(handles.index + 1 == size(handles.images))
+if(handles.index == size(handles.images, 1))
     handles.index = 1;
 else 
     handles.index = handles.index + 1;
@@ -146,17 +146,26 @@ roadsigns = roadSignRecognition(filepath);
 i = 0;
 listSign = {handles.sign1, handles.sign2, handles.sign3, handles.sign4};
 listRectangle = {handles.rectangle1, handles.rectangle2, handles.rectangle3, handles.rectangle4};
-size(roadsigns)
-while i < 4 && i < (size(roadsigns, 2))
-    i = i+1;
+for i = 1:4
     axes(listSign{i});
-    signImage = getMatchingSign(roadsigns(i).id);
-    imshow(signImage);
+    if i < (size(roadsigns, 2))
+        signImage = getMatchingSign(roadsigns(i).id);
+        imshow(signImage);
+    else
+        cla
+    end
     axes(listRectangle{i})
-    signImage = roadsigns(i).image;
-    imshow(signImage);
+    if i < (size(roadsigns, 2))
+        signImage = roadsigns(i).image;
+        imshow(signImage);
+    else
+        cla
+    end
 end
 numSignsLeft = size(roadsigns, 2) - i;
+if numSignsLeft < 0
+    numSignLeft = 0;
+end
 set(handles.signText, 'String', strcat(num2str(numSignsLeft),' signs more'));
 
 function handles = updateImages(handles)

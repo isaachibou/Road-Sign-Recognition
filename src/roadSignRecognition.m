@@ -68,19 +68,11 @@ function [roadsigns] = roadSignRecognition( filepath )
         figure 
         imshow(graySign)
         
-        
         % Compute density for each area of the picture
         densities = computeDensities(graySign, R, m, n);
 
         % Class identification according to densities comparison
-        learningDensities = load('learningDensities.mat', '-ascii');
         roadsigns(i).id = seekClass(densities, learningDensities);
     end
 
-
-    %% Show every detected signs
-     %for i = 1:size(roadsigns,2)
-     %  figure('name', ['ID=',num2str(roadsigns(i).id)])
-     %  imshow(roadsigns(i).image)
-     %end
 end
