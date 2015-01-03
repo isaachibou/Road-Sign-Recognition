@@ -82,7 +82,7 @@ if(handles.index == 1)
 else 
     handles.index = handles.index - 1;
 end
-imagepath = strcat(handles.filepath,'\',handles.images(handles.index).name);
+imagepath = strcat(handles.filepath,filesep,handles.images(handles.index).name);
 I = imread(imagepath);
 axes(handles.image);
 imshow(I);
@@ -99,7 +99,7 @@ if(handles.index == size(handles.images, 1))
 else 
     handles.index = handles.index + 1;
 end
-imagepath = strcat(handles.filepath,'\',handles.images(handles.index).name);
+imagepath = strcat(handles.filepath,filesep,handles.images(handles.index).name);
 I = imread(imagepath);
 axes(handles.image);
 imshow(I);
@@ -182,7 +182,7 @@ else
 end
 
 if(size(handles.images) > 0)
-    imagepath = strcat(handles.filepath,'\',handles.images(1).name);
+    imagepath = strcat(handles.filepath,filesep,handles.images(1).name);
     I = imread(imagepath);
     axes(handles.image);
     imshow(I);

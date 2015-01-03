@@ -57,16 +57,19 @@ function [roadsigns] = roadSignRecognition( filepath )
     for i = 1:size(roadsigns, 2)   
         % Dimensions of regarded rectangle
         R = [1 1 size(roadsigns(i).image,2) size(roadsigns(i).image,1)];
-
+        
+        mask = imcomplement(im2bw(rgb2gray(roadsigns(i).image),graythresh(rgb2gray(roadsigns(i).image))));
+        graySign=rgb2gray(roadsigns(i).image).*uint8(mask);
+        
         % Equalize histogram
-        graySign = rgb2gray(roadsigns(i).image);
         graySign = histeq(graySign);
         
-        % background must be black --> TODO: must be improved
-        mask = imcomplement(im2bw(graySign,graythresh(graySign)));
-        graySign=graySign.*uint8(mask);
         figure 
         imshow(graySign)
+        
+        % background must be black --> TODO: must be improved
+        
+        
         
         % Compute density for each area of the picture
         densities = computeDensities(graySign, R, m, n);
