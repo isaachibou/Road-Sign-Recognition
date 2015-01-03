@@ -59,10 +59,18 @@ function [roadsigns] = roadSignRecognition( filepath )
         R = [1 1 size(roadsigns(i).image,2) size(roadsigns(i).image,1)];
 
         % Equalize histogram
-        roadsigns(i).image = histeq(roadsigns(i).image);
+        graySign = rgb2gray(roadsigns(i).image);
+        graySign = histeq(graySign);
+        
+        % background must be black --> TODO: must be improved
+        mask = imcomplement(im2bw(graySign,graythresh(graySign)));
+        graySign=graySign.*uint8(mask);
+        figure 
+        imshow(graySign)
+        
         
         % Compute density for each area of the picture
-        densities = computeDensities(roadsigns(i).image, R, m, n);
+        densities = computeDensities(graySign, R, m, n);
 
         % Class identification according to densities comparison
         learningDensities = load('learningDensities.mat', '-ascii');
@@ -71,8 +79,8 @@ function [roadsigns] = roadSignRecognition( filepath )
 
 
     %% Show every detected signs
-    % for i = 1:size(roadsigns,2)
-    %     figure('name', 'final')
-    %     imshow(roadsigns(i).image)
-    % end
+     %for i = 1:size(roadsigns,2)
+     %  figure('name', ['ID=',num2str(roadsigns(i).id)])
+     %  imshow(roadsigns(i).image)
+     %end
 end
