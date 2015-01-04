@@ -1,7 +1,7 @@
-function [ signs ] = squareDetection( I0 )
+function [ signs ] = squareDetection( I0, props )
 
     %-- Parameters
-    filledProportion = 0.8;
+    filledProportion = props;
     
     %-- Find blue zones in I
     I = rgb2hsv(I0);    
@@ -46,7 +46,7 @@ function [ signs ] = squareDetection( I0 )
         elseif (props(3,i)/props(4,i) > 1.5 || props(4,i)/props(3,i) > 1.5)
         else 
             %-- Check density t determine if the object is appr. squared
-            [infX, supX, infY, supY] = floorCoordinates(props(:,i), size(BW,2), size(BW,2));
+            [infX, supX, infY, supY] = floorCoordinates(props(:,i), size(BW,1), size(BW,2));
             
             %-- Draw detected signs
             %rectangle('Position', props(:,i), 'EdgeColor', 'c');

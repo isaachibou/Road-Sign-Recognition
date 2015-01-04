@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 03-Jan-2015 14:55:15
+% Last Modified by GUIDE v2.5 04-Jan-2015 18:32:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,7 +54,8 @@ function gui_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for gui
 handles.output = hObject;
-
+handles.sensCircle = get(handles.sensTextBox, 'String');
+handles.propsSquare = get(handles.propsTextBox, 'String');
 % Update handles structure
 guidata(hObject, handles);
 
@@ -106,6 +107,42 @@ imshow(I);
 launchRecognition(imagepath, handles);
 guidata(hObject, handles);
 
+function textBox_Callback(hObject, eventdata, handles)
+% hObject    handle to textBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of textBox as text
+%        str2double(get(hObject,'String')) returns contents of textBox as a double
+handles.filepath = get(handles.textBox,'String');
+handles = updateImages(handles);
+handles.index = 1;
+guidata(hObject,handles);
+
+% --- Executes on button press in launchRecognButton.
+function launchRecognButton_Callback(hObject, eventdata, handles)
+% hObject    handle to launchRecognButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+imagepath = strcat(handles.filepath,filesep,handles.images(handles.index).name);
+launchRecognition(imagepath, handles);
+
+% --- Executes on button press in radiobutton1.
+function radiobutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton1
+
+% --- Executes on button press in radiobutton2.
+function radiobutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton2
+
 % --- Executes on button press in loadFolderButton.
 function loadFolderButton_Callback(hObject, eventdata, handles)
 % hObject    handle to loadFolderButton (see GCBO)
@@ -129,32 +166,23 @@ handles = updateImages(handles);
 handles.index = 1;
 guidata(hObject,handles);
 
-% --- Executes during object creation, after setting all properties.
-function textBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to textBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
 function launchRecognition(imagepath, handles)
-roadsigns = roadSignRecognition(imagepath);
+get(handles.sensTextBox, 'String')
+get(handles.propsTextBox, 'String')
+get(handles.eqCheckBox, 'Value')
+roadsigns = roadSignRecognition(imagepath, str2double(get(handles.sensTextBox, 'String')), str2double(get(handles.propsTextBox, 'String')), get(handles.eqCheckBox, 'Value'));
 listSign = {handles.sign1, handles.sign2, handles.sign3, handles.sign4};
 listRectangle = {handles.rectangle1, handles.rectangle2, handles.rectangle3, handles.rectangle4};
 for i = 1:4
     axes(listSign{i});
-    if i < (size(roadsigns, 2))
+    if i < (size(roadsigns, 2)) + 1
         signImage = getMatchingSign(roadsigns(i).id, roadsigns(i).shape);
         imshow(signImage);
     else
         cla
     end
     axes(listRectangle{i})
-    if i < (size(roadsigns, 2))
+    if i < (size(roadsigns, 2)) + 1
         signImage = roadsigns(i).image;
         imshow(signImage);
     else
@@ -167,11 +195,12 @@ if numSignsLeft < 0
 end
 set(handles.signText, 'String', strcat(num2str(numSignsLeft),' signs more'));
 
+
 function handles = updateImages(handles)
 filepath = get(handles.textBox, 'String');
 if isequal(exist(filepath,'file'),2) % 2 means it's a file.
     handles.images = dir(fullfile(filepath));
-    handles.filepath = filepath; %marche pas
+    handles.filepath = filepath;
 elseif isequal(exist(filepath, 'dir'),7) % 7 = directory.
     handles.images = dir(fullfile(filepath, '/*.png')); 
     handles.filepath = filepath;
@@ -188,16 +217,62 @@ if(size(handles.images) > 0)
     launchRecognition(imagepath, handles);
 end
 
-
-
-function textBox_Callback(hObject, eventdata, handles)
+% --- Executes during object creation, after setting all properties.
+function textBox_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to textBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function sensTextBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to sensTextBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function propsTextBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to propsTextBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in eqCheckBox.
+function eqCheckBox_Callback(hObject, eventdata, handles)
+% hObject    handle to eqCheckBox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of textBox as text
-%        str2double(get(hObject,'String')) returns contents of textBox as a double
-handles.filepath = get(handles.textBox,'String');
-handles = updateImages(handles);
-handles.index = 1;
-guidata(hObject,handles);
+% Hint: get(hObject,'Value') returns toggle state of eqCheckBox
+
+function sensTextBox_Callback(hObject, eventdata, handles)
+% hObject    handle to sensTextBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of sensTextBox as text
+%        str2double(get(hObject,'String')) returns contents of sensTextBox as a double
+
+function propsTextBox_Callback(hObject, eventdata, handles)
+% hObject    handle to propsTextBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of propsTextBox as text
+%        str2double(get(hObject,'String')) returns contents of propsTextBox as a double

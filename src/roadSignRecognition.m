@@ -1,4 +1,4 @@
-function [roadsigns] = roadSignRecognition( filepath )
+function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, useEq )
     %% ROAD SIGN RECOGNITION
     % Application aiming at recognizing road signs on french roads.
 
@@ -16,6 +16,7 @@ function [roadsigns] = roadSignRecognition( filepath )
     % -- height
     n = 6;
     % -- Learning
+    
     if ~exist('learningDensities_circular.mat', 'file')
         learningDensities_circular = learningPhase(m, n, 'circular');
     else
@@ -36,7 +37,7 @@ function [roadsigns] = roadSignRecognition( filepath )
 
     %% Squares
     % Look for squared shapes in blue regions
-    squares = squareDetection(roadsignImage);
+    squares = squareDetection(roadsignImage, propsSquare);
 
     % If at least one is found, add it to the roadsign collection
     if(not(isempty(squares)) && strcmp(squares(1).shape, 'square'))
@@ -54,17 +55,17 @@ function [roadsigns] = roadSignRecognition( filepath )
     
     %% Circular Pannels
     % Look for circular shapes 
-    circles = circleDetection(roadsignImage);
+    circles = circleDetection(roadsignImage, sensCircle);
 
     % If at least one is found, add it to the roadsign collection
     if(not(isempty(circles)) && strcmp(circles(1).shape, 'circular'))
         roadsigns = [roadsigns circles];
     end
+    
     %% Color detection
     colorDetection(roadsigns);
 
     %% Roadsign identification knowing shape, main color and secondary color
-
     for i = 1:size(roadsigns, 2)   
         % Dimensions of regarded rectangle
         R = [1 1 size(roadsigns(i).image,2) size(roadsigns(i).image,1)];
@@ -76,7 +77,9 @@ function [roadsigns] = roadSignRecognition( filepath )
         graySign=rgb2gray(roadsigns(i).image).*uint8(mask);
         
         % Equalize histogram
-        graySign = histeq(graySign);
+        if(useEq)
+            graySign = histeq(graySign);
+        end
 
         %figure 
         %imshow(graySign) 
