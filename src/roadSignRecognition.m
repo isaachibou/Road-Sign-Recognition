@@ -16,6 +16,7 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
     % -- height
     n = 6;
     % -- Learning
+    d = 10;
     
     if ~exist('learningDensities_circular.mat', 'file')
         learningDensities_circular = learningPhase(m, n, 'circular');
@@ -23,10 +24,10 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
         learningDensities_circular = load('learningDensities_circular.mat', '-ascii');
     end
     
-    if ~exist('learningDensities_triangular.mat', 'file')
-        learningDensities_triangular = learningPhase(m, n, 'triangular');
+    if ~exist('learningProfiles_triangular.mat', 'file')
+        learningProfiles_triangular = learningProfiles(d);
     else
-        learningDensities_triangular = load('learningDensities_triangular.mat', '-ascii');
+        learningProfiles_triangular = load('learningProfiles_triangular.mat', '-ascii');
     end
     
     if ~exist('learningDensities_square.mat', 'file')
@@ -41,7 +42,7 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
 
     % If at least one is found, add it to the roadsign collection
     if(not(isempty(squares)) && strcmp(squares(1).shape, 'square'))
-        roadsigns = [roadsigns squares];
+       roadsigns = [roadsigns squares];
     end
 
     %% Triangles 
@@ -59,7 +60,7 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
 
     % If at least one is found, add it to the roadsign collection
     if(not(isempty(circles)) && strcmp(circles(1).shape, 'circular'))
-        roadsigns = [roadsigns circles];
+       roadsigns = [roadsigns circles];
     end
     
     %% Color detection
@@ -80,9 +81,6 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
         if(useEq)
             graySign = histeq(graySign);
         end
-
-        %figure 
-        %imshow(graySign) 
         
         % Compute density for each area of the picture
         densities = computeDensities(graySign, R, m, n);
@@ -94,7 +92,10 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
                 roadsigns(i).id = seekClass(densities,learningDensities_circular)
             case 'triangular'
                 disp('triangle')
-                roadsigns(i).id = seekClass(densities,learningDensities_triangular)
+                %roadsigns(i).id = seekClass(densities,learningDensities_triangular)
+                
+                profiles = seekProfiles(getIndoor(roadsigns(i).image), R, 10 ,1);
+                roadsigns(i).id = distEuclid(profiles,learningProfiles_triangular);
             case 'square'
                 disp('square')
                 roadsigns(i).id = seekClass(densities,learningDensities_square)

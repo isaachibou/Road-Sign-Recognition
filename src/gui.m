@@ -202,7 +202,11 @@ if isequal(exist(filepath,'file'),2) % 2 means it's a file.
     handles.images = dir(fullfile(filepath));
     handles.filepath = filepath;
 elseif isequal(exist(filepath, 'dir'),7) % 7 = directory.
-    handles.images = dir(fullfile(filepath, '/*.png')); 
+    handles.images = dir(fullfile(filepath, '/*.png'));
+	jpg = dir(fullfile(filepath, '*.jpg'));
+    if not(isempty(jpg))
+         handles.images = [ handles.images ; jpg];
+    end
     handles.filepath = filepath;
 else
     display('Seems like path is not correct');

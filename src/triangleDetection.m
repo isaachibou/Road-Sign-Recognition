@@ -67,7 +67,8 @@ function [ triangles ] = triangleDetection( I )
             hlines=horizontalLines(lines);
 
             if not(isempty(hlines(1).point1))
-               if isTriangle(lines,hlines);
+               if isTriangle(lines,hlines);             
+                   
                    %add this triangle at the list
                    triangles(index) = struct('image', I(l:l2, c:c2,:), 'shape', 'triangular', 'color1', 'red', 'color2', '', 'id', '');
                    index=index+1;
