@@ -16,14 +16,22 @@ function [roadsigns] = roadSignRecognition( filepath )
     % -- height
     n = 6;
     % -- Learning
-    if ~exist('learningDensities.mat', 'file')
-        learningDensities_circular = learningPhase(m,n,'circular');
-        learningDensities_triangular = learningPhase(m,n,'triangular');
-        learningDensities_square = learningPhase(m,n,'square');
+    if ~exist('learningDensities_circular.mat', 'file')
+        learningDensities_circular = learningPhase(m, n, 'circular');
     else
-        learningDensities_circular = load('learningDensities_circular.mat','-ascii');  
-        learningDensities_triangular = load('learningDensities_triangular.mat','-ascii');
-        learningDensities_square = load('learningDensities_square.mat','-ascii');
+        learningDensities_circular = load('learningDensities_circular.mat', '-ascii');
+    end
+    
+    if ~exist('learningDensities_triangular.mat', 'file')
+        learningDensities_triangular = learningPhase(m, n, 'triangular');
+    else
+        learningDensities_triangular = load('learningDensities_triangular.mat', '-ascii');
+    end
+    
+    if ~exist('learningDensities_square.mat', 'file')
+        learningDensities_square = learningPhase(m, n, 'square');
+    else
+        learningDensities_square = load('learningDensities_square.mat', '-ascii');
     end
 
     %% Squares
