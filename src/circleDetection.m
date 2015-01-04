@@ -7,7 +7,7 @@ function [ signs ] = circleDetection( I )
     %-- Extract the three strongests
     [a, ~] = size(centers);
         
-    limit = 3;
+    limit = 2;
     if a < limit 
        limit = a; 
     end        
@@ -22,8 +22,8 @@ function [ signs ] = circleDetection( I )
         infY = floor(centers(i,2) - radii(i));
         supY = ceil(centers(i,2) + radii(i));
         
-        %figure('name', 'circle')
-        %imshow(I(infY:supY, infX:supX, :))
+        figure('name', 'circle')
+        imshow(I(infY:supY, infX:supX, :))
         signs(i).image = I(infY:supY, infX:supX, :);
         signs(i).shape = 'circular';
     end

@@ -7,7 +7,6 @@ function [ class ] = seekClass( densities, base)
     
     for i = 1:nBclass
         sum = 0;
-        currentValue = 0;
         for j = 1:nBzone
             if j == 1
                 % Save current value
@@ -21,8 +20,7 @@ function [ class ] = seekClass( densities, base)
         end
         diff(i) = sum/nBzone;
     end
-    
-    index = min(diff)
+    index = min(diff);
     class = find(diff == index);
 end
 

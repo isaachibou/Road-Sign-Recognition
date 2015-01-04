@@ -141,15 +141,14 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-function launchRecognition(filepath, handles)
-roadsigns = roadSignRecognition(filepath);
-i = 0;
+function launchRecognition(imagepath, handles)
+roadsigns = roadSignRecognition(imagepath);
 listSign = {handles.sign1, handles.sign2, handles.sign3, handles.sign4};
 listRectangle = {handles.rectangle1, handles.rectangle2, handles.rectangle3, handles.rectangle4};
 for i = 1:4
     axes(listSign{i});
     if i < (size(roadsigns, 2))
-        signImage = getMatchingSign(roadsigns(i).id);
+        signImage = getMatchingSign(roadsigns(i).id, roadsigns(i).shape);
         imshow(signImage);
     else
         cla
@@ -164,7 +163,7 @@ for i = 1:4
 end
 numSignsLeft = size(roadsigns, 2) - i;
 if numSignsLeft < 0
-    numSignLeft = 0;
+    numSignsLeft = 0;
 end
 set(handles.signText, 'String', strcat(num2str(numSignsLeft),' signs more'));
 
