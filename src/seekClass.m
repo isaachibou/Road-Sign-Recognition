@@ -20,7 +20,7 @@ function [ class ] = seekClass( densities, base)
         end
         diff(i) = sum/nBzone;
     end
-    index = min(diff);
-    class = find(diff == index);
+    [~, class] = min(diff);
+    %class = find(diff == index);
 end
 
