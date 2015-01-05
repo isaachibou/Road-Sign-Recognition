@@ -5,7 +5,7 @@ function [ id ] = distEuclid( profiles,base )
     
     % chgt de chiffre toutes les d*2 lignes
    for i=1:l        
-        v=profiles(1,:)-base(i,:)
+        v = profiles(1,:)-base(i,:);
         distances(i)=sqrt(sum(v.^2));
    end
    

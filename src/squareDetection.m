@@ -62,7 +62,7 @@ function [ signs ] = squareDetection( I0, props )
             end
             if density/pixelNum > filledProportion         
                 %-- Draw detected signs
-                % rectangle('Position', props(:,i), 'EdgeColor', 'r');
+                rectangle('Position', props(:,i), 'EdgeColor', 'r');
                 %-- Create new squared sign to be returned by the function
                 signs(signsIndex).image = I0(infY:supY, infX:supX, :);
                 %figure('name', 'square')

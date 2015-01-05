@@ -89,18 +89,20 @@ function [roadsigns] = roadSignRecognition( filepath, sensCircle, propsSquare, u
         switch roadsigns(i).shape
             case 'circular'
                 disp('circle')
-                roadsigns(i).id = seekClass(densities,learningDensities_circular)
+                roadsigns(i).id = seekClass(densities,learningDensities_circular, true, roadsigns(i).color1);
             case 'triangular'
-                disp('triangle')
-                %roadsigns(i).id = seekClass(densities,learningDensities_triangular)
-                
-                profiles = seekProfiles(getIndoor(roadsigns(i).image), R, 10 ,1);
+                disp('triangle')                
+                profiles = seekProfiles(getIndoor(roadsigns(i).image), R, 10 ,false);
                 roadsigns(i).id = distEuclid(profiles,learningProfiles_triangular);
             case 'square'
                 disp('square')
-                roadsigns(i).id = seekClass(densities,learningDensities_square)
+                roadsigns(i).id = seekClass(densities,learningDensities_square, false, '');
             case default
         end
+        disp(roadsigns(i).id(1))
+        disp(roadsigns(i).color1)
+        disp(roadsigns(i).color2)
+        
     end
 
 end

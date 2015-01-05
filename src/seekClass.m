@@ -1,11 +1,23 @@
-function [ class ] = seekClass( densities, base)
+function [ class ] = seekClass( densities, base, isCircle, color1)
 %Blablabla
       
     nBzone = size(densities, 2);
     nBclass = size(base, 1);
-    diff = zeros(nBclass, 1);
     
-    for i = 1:nBclass
+    from = 1;
+    to = nBclass;
+    diff = zeros(nBclass, 1);
+    diff(:, 1) = 1000;
+    
+    if isCircle
+       if strcmp(color1,'red')
+           to = 19;
+       else
+           from = 20;
+       end
+    end
+
+    for i = from:to
         sum = 0;
         for j = 1:nBzone
             if j == 1
@@ -20,7 +32,7 @@ function [ class ] = seekClass( densities, base)
         end
         diff(i) = sum/nBzone;
     end
+    
     [~, class] = min(diff);
-    %class = find(diff == index);
 end
 

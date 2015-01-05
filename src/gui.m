@@ -167,9 +167,7 @@ handles.index = 1;
 guidata(hObject,handles);
 
 function launchRecognition(imagepath, handles)
-get(handles.sensTextBox, 'String')
-get(handles.propsTextBox, 'String')
-get(handles.eqCheckBox, 'Value')
+set(handles.signText, 'String', 'Loading ...');
 roadsigns = roadSignRecognition(imagepath, str2double(get(handles.sensTextBox, 'String')), str2double(get(handles.propsTextBox, 'String')), get(handles.eqCheckBox, 'Value'));
 listSign = {handles.sign1, handles.sign2, handles.sign3, handles.sign4};
 listRectangle = {handles.rectangle1, handles.rectangle2, handles.rectangle3, handles.rectangle4};
@@ -202,7 +200,7 @@ if isequal(exist(filepath,'file'),2) % 2 means it's a file.
     handles.images = dir(fullfile(filepath));
     handles.filepath = filepath;
 elseif isequal(exist(filepath, 'dir'),7) % 7 = directory.
-    handles.images = dir(fullfile(filepath, '/*.png'));
+    handles.images = dir(fullfile(filepath, filesep,'*.png'));
 	jpg = dir(fullfile(filepath, '*.jpg'));
     if not(isempty(jpg))
          handles.images = [ handles.images ; jpg];
