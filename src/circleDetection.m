@@ -40,7 +40,6 @@ function [ signs ] = circleDetection( I0, sens )
 function [color, isQuiche] = getColor(I)
     I = rgb2hsv(I);
     [~, indexMax] = max(imhist(I(:,:,1)));
-    indexMax
     isQuiche = false;
     color = '';
     if indexMax < 10 || indexMax > 240
